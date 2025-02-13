@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://b4s26menwspvw"]
+
+[ext_resource type="PackedScene" uid="uid://yxbr4xpicghv" path="res://assets/cube_container.gltf" id="1_7hikp"]
+[ext_resource type="Script" path="res://main.gd" id="1_ka3e1"]
+[ext_resource type="Script" path="res://camera_gimbal.gd" id="3_baj7e"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jbxyj"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_jf140"]
+sky_material = SubResource("ProceduralSkyMaterial_jbxyj")
+
+[sub_resource type="Environment" id="Environment_kc5vl"]
+background_mode = 2
+sky = SubResource("Sky_jf140")
+tonemap_mode = 2
+
+[sub_resource type="TorusMesh" id="TorusMesh_2tqja"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_ka3e1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kc5vl")
+
+[node name="CSGBox3D2" parent="." instance=ExtResource("1_7hikp")]
+unique_name_in_owner = true
+
+[node name="CameraGimbal" type="Node3D" parent="."]
+script = ExtResource("3_baj7e")
+
+[node name="InnerGimbal" type="Node3D" parent="CameraGimbal"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.90473, 0.425985, 0, -0.425985, 0.90473, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraGimbal/InnerGimbal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0115225, 0.0642957, 1.21269)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+mesh = SubResource("TorusMesh_2tqja")
