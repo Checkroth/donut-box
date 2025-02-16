@@ -1,19 +1,21 @@
 extends Node3D
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
-	pass # Replace with function body.
+@export var donut_resource: PackedScene
+var default_mouse_mode = Input.MouseMode.MOUSE_MODE_CONFINED
 	
 func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
-		if Input.mouse_mode == Input.MouseMode.MOUSE_MODE_CAPTURED:
-			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE
+		if default_mouse_mode == Input.MouseMode.MOUSE_MODE_CONFINED:
+			default_mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE
 		else:
-			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
-	pass
+			default_mouse_mode = Input.MouseMode.MOUSE_MODE_CONFINED
+	if event is InputEventMouseButton and event.is_double_click():
+		print("DOUBLE CLICK")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
+	else:
+		Input.mouse_mode = default_mouse_mode

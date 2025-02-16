@@ -7,8 +7,17 @@ var mouse_sensitivity = 0.005
 @onready var inner_gimbal = %InnerGimbal
 @onready var target = %CSGBox3D2
 
+var holding_camera = false
+
 func _unhandled_input(event):
-	if event is InputEventMouseMotion:
+	# TODO:: Make this work on touch screens. 1 finger vs 2 fingers should equate to left & right mouse.
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.is_pressed():
+			holding_camera = true
+		else:
+			holding_camera = false
+
+	if holding_camera and event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		if event.relative.x != 0:
 			var dir = 1 if invert_x else -1
 			rotate_object_local(Vector3.UP, dir * event.relative.x * mouse_sensitivity)
