@@ -1,4 +1,4 @@
-# Godot 4+ specific ignores
+.# Godot 4+ specific ignores
 .godot/
 
 # Godot-specific ignores
@@ -14,3 +14,6 @@ addons/
 .mono/
 data_*/
 mono_crash.*.json
+
+# Checkroth-specific workflow
+builds/

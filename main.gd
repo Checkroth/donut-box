@@ -14,7 +14,7 @@ func _input(event):
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func __process(delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
 	else:
