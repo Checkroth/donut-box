@@ -1,22 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://b4s26menwspvw"]
+[gd_scene load_steps=7 format=3 uid="uid://b4s26menwspvw"]
 
 [ext_resource type="PackedScene" uid="uid://yxbr4xpicghv" path="res://assets/cube_container.gltf" id="1_7hikp"]
 [ext_resource type="Script" path="res://main.gd" id="1_ka3e1"]
 [ext_resource type="Script" path="res://camera_gimbal.gd" id="3_baj7e"]
 [ext_resource type="PackedScene" uid="uid://35cmtr5setd" path="res://whitebox_donut.tscn" id="4_j0kn4"]
 [ext_resource type="Script" path="res://donut_grabber.gd" id="5_jswds"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jbxyj"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_jf140"]
-sky_material = SubResource("ProceduralSkyMaterial_jbxyj")
-
-[sub_resource type="Environment" id="Environment_kc5vl"]
-background_mode = 2
-sky = SubResource("Sky_jf140")
-tonemap_mode = 2
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_spxs7"]
 data = PackedVector3Array(1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, 1.5, 1.5, -1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, 1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, 1.5, 1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, -1.5, -1.5, -1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.26, 1.26, 1.26, 1.26, -1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, 1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, 1.26, 1.26, -1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, -1.26, 1.26, -1.26, 1.26, 1.26, -1.26, -1.26, 1.26, -1.26, 1.26, -1.26, -1.26, -1.26, -1.26, -1.26, -1.26, 1.26, 1.26, -1.26, -1.26, 1.26, -1.26, 1.26, 1.26, -1.26, -1.26, -1.26, -1.26, 1.26, -1.26, -1.26, -1.26, 1.26, -1.26, -1.26, -1.26, 1.26, -1.26, 1.26, 1.26, -1.26, -1.26, 1.26, -1.26, 1.26, -1.26, -1.26, -1.26, -1.26, -1.26)
@@ -26,7 +14,6 @@ script = ExtResource("1_ka3e1")
 donut_resource = ExtResource("4_j0kn4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_kc5vl")
 
 [node name="CameraGimbal" type="Node3D" parent="."]
 script = ExtResource("3_baj7e")
@@ -50,3 +37,13 @@ shape = SubResource("ConcavePolygonShape3D_spxs7")
 
 [node name="DonutGrabber" type="Node3D" parent="."]
 script = ExtResource("5_jswds")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.647703, 0)
+light_color = Color(1, 0.937255, 1, 1)
+light_energy = 0.515
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000350952, -0.485893, -0.00462782)
+light_color = Color(1, 0.937255, 1, 1)
+light_energy = 0.515
