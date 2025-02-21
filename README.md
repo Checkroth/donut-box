@@ -12,6 +12,17 @@ Disclaimer that at the time of writing this, I am a novice at both Blender and G
 
 This tutorial is aimed to get a sort of WYSIWYG export of a blender object directly in to a Godot project. I do not think it is the best practice to follow for something larger scale that needs maintainability, but is a helpful step to learning how godot works with blender. It may also be a simpler, more preferrable approach for development of smaller scale projects, like a game jam.
 
+Detailed steps are below, the summarized tl;dr steps are:
+
+1. Make a new blener file with *just* the donut (and sprinkle instances)
+2. Delete camera and light
+4. Fix normals in Blender
+5. Realize instances with non-shader materials in blender
+6. Toggle `Automatically Pack Resources` in Blender
+7. Collision mesh?
+8. Drag & Drop in to Godot and replace the whitebox donut
+
+
 ## 1: Starting with Blender
 
 This project assumes that you have followed the [Blender Guru Donut Tutorial]((https://www.youtube.com/playlist?list=PLjEaoINr3zgEPv5y--4MKpciLaoQYZB1Z)).
@@ -62,20 +73,68 @@ Now you can load the donut in Godot, and you should have a proper donut with ici
 
 #### Where are my Colors?
 
-This is the biggest head-scratcher for me. Realizing instances for the sprinkles not appropriately applying shaders is one thing, but you might also notice if you just load the donut with the realized sprinkles, the sprinkles don't have *any* color, including the one that you can clearly see in blender!
-And if you're anything like me, you are also missing the color of the frosting *and* the texture of the donut itself!
+todo:: Light and Camera removal
 
-Somehow, only a glimpse of color has made its way in to Godot and everything else is white.
+You might notice your donut has a little bit of color on the icing, but its patchy and *mostly* white. This has to do with how the Blender -> Godot pipeline handles *lighting* on the blender side.
+
+In most cases, your game will be in charge of the lighting. You'll need to go in to Blender and delete the Light from the scene entirely. While you're there you might want to delete the camera as well -- all we really want is the donut itself.
+
+Now if you import to godot, some of your colors should be working (in my case, only the material of the icing at this point)
+
+**Baking Sprinkle Shaders**
+
+
+Todo:: is this even possible?
+
+1. "Make Instances Real" to create instances from your geometry node
+2. "Apply" your geometry node to remove duplication and keep any other effects not related to the instances
+3. Group sprinkles (select them all -> M -> new group)
+    - This is just to make the next steps easier, it isn't strictly necessary
+4. Select all Sprinkles -> "Make Single User -> Object & Data"
+    - Critical for texture baking, otherwise each sprinkle variety will only have one mesh in the uv map
+5. Add "Image Texture" in Shading
+6. 
+
+I highly suggest you follow [Ryan King Art's Texture Map Baking Tutorial](https://www.youtube.com/watch?v=eE7FedDW2AI) and do this part yourself.
 
 #### Where are my Textures?
 
-Now that the *material* for all of your sprinkles is working, you might notice that the donut itself, which is a *texture*, is still just a matte white.
+The icing is working now, but the donut itself is still white. And so are all the sprinkles.
+
+The donut uses a texture, not a material or shader.
 
 Textures are a *separate* file from the `.blend` file. If you're working in one big project with godot and blender assets together, this is *probably* fine. But for the limited scope of this tutorial, all we want to do is *take a blender object and drop it as-is in to godot*, without worrying about larger-scale project tooling.
 
 You can *pack* a texture directly in to the `.blend` file, but that functionality is off by default. In *blender*, go to `File -> Export -> Automatically Pack Resources`, and make sure `Automatically Pack Resources` is checked. Save the blender project and add it to godot, and now your donut should have the texture you createad in part 5 of the blender guru tutorial.
 
-You will notice now that the texture file you created in blender is also showing up in the godot project.
+You will notice now that the texture file you created in blender is also showing up in the godot project as a separate file.
+
+#### What about the Sprinkle Colors?
+
+This is the most troublesome part bringing your donut in to godot -- the short answer is, because of the way the donut tutorial has you set this up, there really isn't a away to bring the sprinkles over as they are.
+
+The sprinkles are using a Shader in blender, and blender shaders are simply not transferrable to godot (or anything other than blender, for that matter.) If you're going to use shaders you want to use them *in godot*.
+
+There are a few paths you could take, the most straightforward are:
+
+1. Bake the sprinkle shaders in to a texture, and pack that with the scene.
+    - If you want to try this, I highly suggest you follow [Ryan King Art's Texture Map Baking Tutorial](https://www.youtube.com/watch?v=eE7FedDW2AI).
+    - You will first need to "Make instances real" and "Make Object & Data Single User" for the sprinkles, after that its a matter of having the hardware to sample thousands of cycles
+2. Re-implement the shader in Godot
+3. Re-implement your sprinkles so that there's a real instance of every permutation (material x shape) and use that as the group for your geometry node, without using shaders at all.
+
+This guide is going to explore option 3, mainly because it's the only approach I was able to actually implement.
+
+1. "Duplicate objects" for all of your sprinkle shapes and move them so you can see them separately. Do this for every color variation in your shader.
+2. For each cluster of sprinkles, create a new *material* and assign it the color, roughness, metallic, etc. settings your shader would apply.
+3. Apply that material to every shape sprinkle in that cluster.
+4. Repeat for every shader material output. I only had five colors and four shapes. So five clusters of sprinkles with four sprinkles in each.
+5. Ensure all of those sprinkles have the right material applied (NOT the shader material from the tutorial), and are all in the same group (the one used by the geonode)
+6. In geometry nodes, right before the end add "realize instances"
+7. "Apply" the geommetry node so that it takes effect.
+8. Delete the "source" sprinkles, we don't need them anymore.
+
+Now you should have a donut with the materials for its sprinkles baked directly in to the model. If you import this in blender, the sprinkles should have the correct materials instead of being matte white.
 
 #### Where is my Collision Mesh?
 
@@ -83,7 +142,7 @@ Dragging a `.blend` file from the filesystem browser in to your scene will give 
 
 If you try to replace the whole whitebox scene with your blender scene, you'll lose collision. If you try to replace the torus in the whitebox donut scene with your blender scene, it's incredibly unlikely that the existing torus collision shape (which was modeled directly against the torus mesh using godot's `Mesh -> Create Collision Shape` feature) will match your donut.
 
-You could just resize the collision shape to more or less match your donut and call it a day, but that won't help you decide you want something more complex than a slightly deformed but otherwise basic core shape in your game.
+You could just resize the collision shape to more or less match your donut and call it a day, but that won't help you if decide you want something more complex than a slightly deformed but otherwise basic shape in your game.
 
 ## 3: Implementing The Game
 
@@ -104,3 +163,4 @@ In order to make use of your own, cooler donut, you will need to do two things:
 - [Michael Jared's Blender-Godot Pipeline video on Geometry Nodes](https://www.youtube.com/watch?v=z0p-PTyaou8)
 - [ALL THE WORK's Blender Geometry Node Export video](https://www.youtube.com/watch?v=qrXZNG4yAa8)
 - [Kids Can Code's Camera Gimbal recipe](https://kidscancode.org/godot_recipes/4.x/3d/camera_gimbal/index.html) (for the game implementation)
+- [Ryan King Art's Texture Map Baking Tutorial](https://www.youtube.com/watch?v=eE7FedDW2AI) (For translating sprinkle shaders to something we can drop in to godot easily)
