@@ -37,7 +37,7 @@ func _process(delta):
 	if draggingCollider:
 		if FEAT_DRAG_AND_THROW:
 			var position_dif = mousePosition - draggingCollider.global_position
-			draggingCollider.apply_force(position_dif * grab_strength, mousePosition)
+			draggingCollider.apply_force(position_dif * grab_strength, position_dif)
 		else:
 			draggingCollider.global_position = draggingCollider.global_position.lerp(mousePosition, delta * 4.0)
 
@@ -45,9 +45,9 @@ func drag_and_throw(intersect):
 	var canMove = intersect.collider in get_tree().get_nodes_in_group("donuts")
 	if !draggingCollider && doDrag && canMove:
 		draggingCollider = intersect.collider
-		draggingCollider.pick_up()
+		draggingCollider.get_meta("implementor").pick_up()
 	elif draggingCollider:
-		draggingCollider.drop()
+		draggingCollider.get_meta("implementor").drop()
 		draggingCollider = null
 	
 func get_mouse_intersect(mousePosition):

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://mf40r8hhsi1v"]
+
+[ext_resource type="Script" path="res://scenes/donut.gd" id="1_tqc2j"]
+[ext_resource type="PackedScene" uid="uid://35cmtr5setd" path="res://scenes/whitebox_donut.tscn" id="2_73bws"]
+
+[node name="Donut" type="Node3D" groups=["donuts"]]
+script = ExtResource("1_tqc2j")
+
+[node name="WhiteboxDonut" parent="." instance=ExtResource("2_73bws")]
+unique_name_in_owner = true

@@ -73,29 +73,12 @@ Now you can load the donut in Godot, and you should have a proper donut with ici
 
 #### Where are my Colors?
 
-todo:: Light and Camera removal
-
 You might notice your donut has a little bit of color on the icing, but its patchy and *mostly* white. This has to do with how the Blender -> Godot pipeline handles *lighting* on the blender side.
 
 In most cases, your game will be in charge of the lighting. You'll need to go in to Blender and delete the Light from the scene entirely. While you're there you might want to delete the camera as well -- all we really want is the donut itself.
 
 Now if you import to godot, some of your colors should be working (in my case, only the material of the icing at this point)
 
-**Baking Sprinkle Shaders**
-
-
-Todo:: is this even possible?
-
-1. "Make Instances Real" to create instances from your geometry node
-2. "Apply" your geometry node to remove duplication and keep any other effects not related to the instances
-3. Group sprinkles (select them all -> M -> new group)
-    - This is just to make the next steps easier, it isn't strictly necessary
-4. Select all Sprinkles -> "Make Single User -> Object & Data"
-    - Critical for texture baking, otherwise each sprinkle variety will only have one mesh in the uv map
-5. Add "Image Texture" in Shading
-6. 
-
-I highly suggest you follow [Ryan King Art's Texture Map Baking Tutorial](https://www.youtube.com/watch?v=eE7FedDW2AI) and do this part yourself.
 
 #### Where are my Textures?
 
@@ -123,7 +106,7 @@ There are a few paths you could take, the most straightforward are:
 2. Re-implement the shader in Godot
 3. Re-implement your sprinkles so that there's a real instance of every permutation (material x shape) and use that as the group for your geometry node, without using shaders at all.
 
-This guide is going to explore option 3, mainly because it's the only approach I was able to actually implement.
+This guide is going to explore option 3, mainly because it's the only approach I was able to actually implement. Steps are as follows:
 
 1. "Duplicate objects" for all of your sprinkle shapes and move them so you can see them separately. Do this for every color variation in your shader.
 2. For each cluster of sprinkles, create a new *material* and assign it the color, roughness, metallic, etc. settings your shader would apply.
@@ -143,6 +126,8 @@ Dragging a `.blend` file from the filesystem browser in to your scene will give 
 If you try to replace the whole whitebox scene with your blender scene, you'll lose collision. If you try to replace the torus in the whitebox donut scene with your blender scene, it's incredibly unlikely that the existing torus collision shape (which was modeled directly against the torus mesh using godot's `Mesh -> Create Collision Shape` feature) will match your donut.
 
 You could just resize the collision shape to more or less match your donut and call it a day, but that won't help you if decide you want something more complex than a slightly deformed but otherwise basic shape in your game.
+
+You can tell Godot how to treat a mesh from Blender by appending a suffix to the mesh in the blender side. This is a Godot feature, [documentation can be found here](https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/importing_3d_scenes/node_type_customization.html)
 
 ## 3: Implementing The Game
 

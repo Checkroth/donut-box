@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4s26menwspvw"]
+[gd_scene load_steps=8 format=3 uid="uid://b4s26menwspvw"]
 
 [ext_resource type="PackedScene" uid="uid://yxbr4xpicghv" path="res://assets/cube_container.gltf" id="1_7hikp"]
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_ka3e1"]
 [ext_resource type="Script" path="res://scenes/camera_gimbal.gd" id="3_baj7e"]
 [ext_resource type="PackedScene" uid="uid://35cmtr5setd" path="res://scenes/whitebox_donut.tscn" id="4_j0kn4"]
 [ext_resource type="Script" path="res://scenes/donut_grabber.gd" id="5_jswds"]
+[ext_resource type="PackedScene" uid="uid://mf40r8hhsi1v" path="res://scenes/donut.tscn" id="6_21hg0"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_spxs7"]
 data = PackedVector3Array(1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, 1.5, 1.5, -1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, 1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, 1.5, 1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, -1.5, -1.5, -1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -1.5, -1.5, -1.5, -1.5, 1.5, -1.5, -1.5, 1.26, 1.26, 1.26, 1.26, -1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, 1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, 1.26, 1.26, -1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, 1.26, 1.26, 1.26, 1.26, -1.26, 1.26, 1.26, -1.26, 1.26, -1.26, -1.26, -1.26, 1.26, -1.26, 1.26, 1.26, -1.26, -1.26, 1.26, -1.26, 1.26, -1.26, -1.26, -1.26, -1.26, -1.26, -1.26, 1.26, 1.26, -1.26, -1.26, 1.26, -1.26, 1.26, 1.26, -1.26, -1.26, -1.26, -1.26, 1.26, -1.26, -1.26, -1.26, 1.26, -1.26, -1.26, -1.26, 1.26, -1.26, 1.26, 1.26, -1.26, -1.26, 1.26, -1.26, 1.26, -1.26, -1.26, -1.26, -1.26, -1.26)
@@ -12,8 +13,6 @@ data = PackedVector3Array(1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ka3e1")
 donut_resource = ExtResource("4_j0kn4")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 
 [node name="CameraGimbal" type="Node3D" parent="."]
 script = ExtResource("3_baj7e")
@@ -24,8 +23,6 @@ transform = Transform3D(1, 0, 0, 0, 0.90473, 0.425985, 0, -0.425985, 0.90473, 0,
 
 [node name="Camera3D" type="Camera3D" parent="CameraGimbal/InnerGimbal"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0115225, 0.0642957, 1.21269)
-
-[node name="Donut" parent="." groups=["donuts"] instance=ExtResource("4_j0kn4")]
 
 [node name="CollisionShape3D" type="StaticBody3D" parent="."]
 
@@ -47,3 +44,6 @@ light_energy = 0.515
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000350952, -0.485893, -0.00462782)
 light_color = Color(1, 0.937255, 1, 1)
 light_energy = 0.515
+
+[node name="Donut" parent="." instance=ExtResource("6_21hg0")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)

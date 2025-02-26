@@ -1,4 +1,6 @@
-extends RigidBody3D
+extends Node3D
+
+@onready var donut_mesh = %solodono5
 
 var is_dragging = false
 
@@ -10,4 +12,4 @@ func drop():
 
 func _process(delta):
 	if not is_dragging:
-		apply_central_force(-linear_velocity)
+		donut_mesh.apply_central_force(-donut_mesh.linear_velocity)
