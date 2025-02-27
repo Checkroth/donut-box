@@ -14,7 +14,6 @@ func drop():
 	
 func _ready():
 	donut_scene.get_rigid_body().add_to_group("donuts")
-	
 
 func _process(delta):
 	if not is_dragging:

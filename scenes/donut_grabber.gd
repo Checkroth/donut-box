@@ -6,7 +6,10 @@ extends Node3D
 var draggingCollider
 var mousePosition
 var doDrag = false
+var double_click_held = false
 @export var grab_strength = 4.0
+
+signal spawn_donut
 
 const FEAT_DRAG_AND_THROW = true
 
@@ -26,11 +29,14 @@ func _input(event):
 		if leftButtonReleased:
 			doDrag = false
 			drag_and_throw(intersect)
+
 		elif leftButtonPressed:
 			doDrag = true
 			drag_and_throw(intersect)
 			if draggingCollider:
 				get_viewport().set_input_as_handled()
+			elif event.is_double_click():
+				spawn_donut.emit(mousePosition)
 
 
 func _process(delta):

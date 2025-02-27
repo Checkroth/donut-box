@@ -1,9 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://b4s26menwspvw"]
+[gd_scene load_steps=7 format=3 uid="uid://b4s26menwspvw"]
 
 [ext_resource type="PackedScene" uid="uid://yxbr4xpicghv" path="res://assets/cube_container.gltf" id="1_7hikp"]
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_ka3e1"]
 [ext_resource type="Script" path="res://scenes/camera_gimbal.gd" id="3_baj7e"]
-[ext_resource type="PackedScene" uid="uid://35cmtr5setd" path="res://scenes/whitebox_donut.tscn" id="4_j0kn4"]
 [ext_resource type="Script" path="res://scenes/donut_grabber.gd" id="5_jswds"]
 [ext_resource type="PackedScene" uid="uid://mf40r8hhsi1v" path="res://scenes/donut.tscn" id="6_21hg0"]
 
@@ -12,7 +11,7 @@ data = PackedVector3Array(1.5, 1.5, 1.5, 1.5, 1.5, -1.5, 1.5, -1.5, -1.5, 1.5, -
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ka3e1")
-donut_resource = ExtResource("4_j0kn4")
+donut_resource = ExtResource("6_21hg0")
 
 [node name="CameraGimbal" type="Node3D" parent="."]
 script = ExtResource("3_baj7e")
@@ -47,3 +46,5 @@ light_energy = 0.515
 
 [node name="Donut" parent="." instance=ExtResource("6_21hg0")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[connection signal="spawn_donut" from="DonutGrabber" to="." method="_on_donut_grabber_spawn_donut"]
