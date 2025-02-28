@@ -1,12 +1,14 @@
 # donut-box
 
-A Godot extension of the blender guru donut tutorial.
+A Godot extension of the blender guru donut tutorial. [If it helped you, consider donating on ko-fi!](https://ko-fi.com/checkroth)
 
 > "I want to use Blender to make assets for a game in Godot. I've followed the [Donut Tutorial](https://www.youtube.com/playlist?list=PLjEaoINr3zgEPv5y--4MKpciLaoQYZB1Z), now what?"
 
 If you had this thought, you might find this project useful.
 
 Disclaimer that at the time of writing this, I am a novice at both Blender and Godot. If you see a problem or have a suggestion for a better approach, feel free to open an issue.
+
+You can see the final product running with my own version of the blender donut here: https://checkroth.itch.io/donut-box
 
 # The Tutorial
 
