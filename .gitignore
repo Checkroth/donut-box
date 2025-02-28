@@ -17,3 +17,5 @@ mono_crash.*.json
 
 # Checkroth-specific workflow
 builds/
+
+readme_images/*.import

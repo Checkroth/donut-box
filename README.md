@@ -10,8 +10,6 @@ Disclaimer that at the time of writing this, I am a novice at both Blender and G
 
 # The Tutorial
 
-(TODO:: I intend to fill this with screenshots to make it easier to follow soon)
-
 This tutorial is aimed to get a sort of WYSIWYG export of a blender object directly in to a Godot project. I do not think it is the best practice to follow for something larger scale that needs maintainability, but is a helpful step to learning how godot works with blender. It may also be a simpler, more preferrable approach for development of smaller scale projects, like a game jam.
 
 Detailed steps are below, the summarized tl;dr steps are:
@@ -54,25 +52,11 @@ But for this game, all you really need is the donut. There are two things you ca
 
 I suggest (2), otherwise things will get messy when solving the other problems. We'll still need to do (1) down the road for those sprinkles.
 
+![Solo donut setup](readme_images/solo_donut_setup.png)
+
 #### Why is the entire shape messed up?
 
 This is one that some may run in to -- of the donut has a bunch of holes in it or otherwise just looks very strange compared to the source in blender, a decent guess is that your *normals* are wrong. You can fix this pretty easily in blender by selecting everything an "recalculate outside normals" (shift-N in Edit Mode).
-
-#### Where are my Sprinkles?
-
-You copied the whole donut and Blender brought over the dependent sprinkles with it. Now you've imported it in to godot and... the original instance of the sprinkles is there, but the donut itself is baren, what gives?
-
-The blender tutorial uses *geometry nodes* for the sprinkles. That means the sprinkles are more of an *effect*, and less of an actual component of your model. They aren't a part of the mesh, and they don't really "exist".
-
-Luckily, Blender's Geometry Nodes have a feature called "Realize Instances". Just pop it right before the "Geometry" output of your geometry nodes -- or so I thought!. You'll notice that you've lost any color randomization you got from the *shaders* for your donut. You've just taken a copy of a single instance and droppe it all over the donut, and everything has gotten much more boring!
-
-You can undo that last step. There are other solutions:
-
-*In blender*, select everything (hotkey `a`) and click `Object -> Apply -> Make Instances Real`. This will realize everything. The geometry node will also still be there and you may notice flickering on the sprinkles -- it's safe to delete the geometry node setup now.
-
-[Michael Jared's Blender-Godot Pipeline video on Geometry Nodes](https://www.youtube.com/watch?v=z0p-PTyaou8)'s video goes in to some detail about why this isn't really a *great* solution, but it's okay for now. If you'd like to learn more about Blender-Godot pipeline, feel free to watch that video and use that tool instead of just realizing everything in the solo donut scene.
-
-Now you can load the donut in Godot, and you should have a proper donut with icing and sprinkles. But something is still funny...
 
 #### Where are my Colors?
 
@@ -95,7 +79,7 @@ You can *pack* a texture directly in to the `.blend` file, but that functionalit
 
 You will notice now that the texture file you created in blender is also showing up in the godot project as a separate file.
 
-#### What about the Sprinkle Colors?
+#### What about the Sprinkles?
 
 This is the most troublesome part bringing your donut in to godot -- the short answer is, because of the way the donut tutorial has you set this up, there really isn't a away to bring the sprinkles over as they are.
 
@@ -122,6 +106,12 @@ This guide is going to explore option 3, mainly because it's the only approach I
 
 Now you should have a donut with the materials for its sprinkles baked directly in to the model. If you import this in blender, the sprinkles should have the correct materials instead of being matte white.
 
+**Setting up your sprinkle materials BEFORE applying geometry nodes**
+![Sprinkle materials setup](readme_images/sprinkle_material_setup.png)
+
+**Applying Geometry Nodes**
+![Applying geometry nodes](readme_images/apply_geonodes.png)
+
 #### Where is my Collision Mesh?
 
 Dragging a `.blend` file from the filesystem browser in to your scene will give you an instance of the blend file's scene. This should at this point visually look right, but you'll notice that you're missing something important that the whitebox donut has: A collision shape.
@@ -131,6 +121,10 @@ If you try to replace the whole whitebox scene with your blender scene, you'll l
 You could just resize the collision shape to more or less match your donut and call it a day, but that won't help you if decide you want something more complex than a slightly deformed but otherwise basic shape in your game.
 
 You can tell Godot how to treat a mesh from Blender by appending a suffix to the mesh in the blender side. This is a Godot feature, [documentation can be found here](https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/importing_3d_scenes/node_type_customization.html). For this tutorial, we want to treat the donut as a rigid body, so make sure that the blener scene name ends with `-rigid`.
+
+You should now be in this sort of **final blender state**
+![Final blender state](readme_images/final_blender_state.png)
+
 ## 3: Implementing The Game
 
 You can clone the repository to get a nearly-working version of the game.
@@ -149,6 +143,8 @@ I [tried a few things](https://discord.com/channels/1235157165589794909/13438342
  1. Ensure the naming on the blender-side is consistent: your donut *must* be titled `object-rigid`. It is set up this way so that you could import any standalone object from blender and use the same helper class.
  2. In Godot, double-click the `.blend` file and ensure the `Root Type` is this project's custom class `RigidBlenderObject`, then re-import.
 
+ ![Godot blender import](readme_images/godot_import.png)
+
 ### Replacing the whitebox donut
 
 1. Drop your `.blend` file in to the `donut.tscn` scene, and make sure its position is set to `0, 0, 0`.
@@ -157,6 +153,8 @@ I [tried a few things](https://discord.com/channels/1235157165589794909/13438342
 That should be it! Under the hood there's a bit going on with collision shapes, raycasting, instantiating, and grouping. But the combination of the donut wrapper that holds an instance of the blender instance and the custom root type for the blender object itself should allow you to simply drop in & replace.
 
 If you have difficulty, you might want to make sure the root and parent structure in blender is correct. The whitebox donut itself is structured in the exact way that your blender donut should be structured after importing to godot, and comparing that with reality could help you find potential issues at this step.
+
+![Godot implementation](readme_images/godot_implement.png)
 
  ### Playing with materials
 
